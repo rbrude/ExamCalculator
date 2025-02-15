@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Finales</title>
+    <style>
+        /* Body styling */
+        body {
+            font-family: 'Andale Mono', monospace;
+            background-color: #00FF00;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Container styling */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #008000;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Header styling */
+        h1 {
+            font-size: 32px;
+            text-align: center;
+        }
+
+        /* Language change button styling */
+        #languageBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #CCCCCC;
+            color: black;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            width: auto; /* Makes sure it doesn't stretch to full width */
+            white-space: nowrap; /* Prevents text from wrapping */
+        }
+
+        /* Logo styling */
+        #logo {
+            display: block;
+            margin: 0 auto;
+            width: 150px;
+        }
+
+        /* Label styling */
+        label {
+            font-size: 14px;
+            margin: 10px 0;
+            display: block;
+        }
+
+        /* Input, select, and button styling */
+        input, select, button {
+            padding: 10px;
+            width: 100%;
+            max-width: 100%;
+            margin: 5px 0;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        /* Button styling and hover effect */
+        button {
+            background-color: #CCCCCC;
+            color: black;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #999999;
+        }
+
+        /* Result area styling */
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #CCCCCC;
+            color: black;
+        }
+
+        /* Footer styling */
+        footer {
+            font-size: 12px;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Language change button -->
+<button id="languageBtn">Cambiar a Inglés</button>
+
+<!-- Main container holding the form and result -->
+<div class="container">
+    <!-- Logo section -->
+    <img src="Images/logoCR.png" alt="Logo" id="logo">
+
+    <h1 id="title">Calculadora de Finales</h1>
+
+    <!-- Input fields for subject name and year -->
+    <label for="subjectName" id="subjectLabel">Nombre de la asignatura:</label>
+    <input type="text" id="subjectName" placeholder="Nombre de la asignatura">
+
+    <label for="year" id="yearLabel">Año de cursada:</label>
+    <input type="text" id="year" placeholder="Año de cursada">
+
+    <label for="quarter" id="quarterLabel">Selecciona el Cuatrimestre:</label>
+    <select id="quarter">
+        <option value="">--Selecciona--</option>
+        <option value="1er Cuatrimestre">1er Cuatrimestre</option>
+        <option value="2do Cuatrimestre">2do Cuatrimestre</option>
+        <option value="Anual">Anual</option>
+    </select>
+
+    <button id="calculateBtn" id="calculateBtnText">Calcular</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<footer id="footer">
+    2021 Rodrigo Brude - Educación Física Crítico Reflexiva - ISEF N°1 Todos los derechos reservados
+</footer>
+
+<script>
+    // Default language: Spanish
+    var language = 'es';
+
+    // Function to change language
+    function changeLanguage() {
+        if (language === 'es') {
+            // Change to English
+            document.getElementById("languageBtn").innerText = "Switch to Spanish";
+            document.getElementById("title").innerText = "Final Calculator";
+            document.getElementById("subjectLabel").innerText = "Subject Name:";
+            document.getElementById("yearLabel").innerText = "Year of enrollment:";
+            document.getElementById("quarterLabel").innerText = "Select the Quarter:";
+            document.getElementById("calculateBtn").innerText = "Calculate";
+            document.getElementById("footer").innerText = "2021 Rodrigo Brude - Critical Reflective Physical Education - ISEF N°1 All rights reserved";
+            document.getElementById("subjectName").placeholder = "Subject Name";
+            document.getElementById("year").placeholder = "Year of enrollment";
+            language = 'en';
+        } else {
+            // Change back to Spanish
+            document.getElementById("languageBtn").innerText = "Cambiar a Inglés";
+            document.getElementById("title").innerText = "Calculadora de Finales";
+            document.getElementById("subjectLabel").innerText = "Nombre de la asignatura:";
+            document.getElementById("yearLabel").innerText = "Año de cursada:";
+            document.getElementById("quarterLabel").innerText = "Selecciona el Cuatrimestre:";
+            document.getElementById("calculateBtn").innerText = "Calcular";
+            document.getElementById("footer").innerText = "2021 Rodrigo Brude - Educación Física Crítico Reflexiva - ISEF N°1 Todos los derechos reservados";
+            document.getElementById("subjectName").placeholder = "Nombre de la asignatura";
+            document.getElementById("year").placeholder = "Año de cursada";
+            language = 'es';
+        }
+    }
+
+    // Add event listener for language button
+    document.getElementById("languageBtn").addEventListener("click", changeLanguage);
+
+    // Event listener for calculate button
+    document.getElementById("calculateBtn").addEventListener("click", function() {
+        var subjectName = document.getElementById("subjectName").value;
+        var year = document.getElementById("year").value;
+        var quarter = document.getElementById("quarter").value;
+
+        if (!subjectName || !year || !quarter) {
+            alert(language === 'es' ? "Debes llenar todos los campos." : "You must fill in all the fields.");
+            return;
+        }
+
+        if (isNaN(year) || year.trim() === "") {
+            alert(language === 'es' ? "Debes ingresar un valor numérico para el año de cursada." : "You must enter a numeric value for the year of enrollment.");
+            return;
+        }
+
+        year = parseInt(year);
+        var resultText = "";
+
+        // Calculate results based on the selected quarter
+        if (quarter === "1er Cuatrimestre") {
+            var nextYear = year + 1;
+            resultText = `
+                ${language === 'es' ? 'Los llamados para la asignatura' : 'The calls for the subject'} <strong>${subjectName}</strong> ${language === 'es' ? 'son:' : 'are:'}
+                <br>1) ${language === 'es' ? 'Llamado mitad de año (julio/agosto) de' : 'Mid-year call (July/August) from'}: ${year}
+                <br>2) ${language === 'es' ? 'Llamado fin de año (diciembre) de' : 'End-of-year call (December) from'}: ${year}
+                <br>3) ${language === 'es' ? 'Llamado principio de año (febrero/marzo) de' : 'Beginning-of-year call (February/March) from'}: ${nextYear}
+                <br>4) ${language === 'es' ? 'Llamado mitad de año (julio/agosto) de' : 'Mid-year call (July/August) from'}: ${nextYear}
+                <br>5) ${language === 'es' ? 'Llamado fin de año (diciembre) de' : 'End-of-year call (December) from'}: ${nextYear}
+                <br>${language === 'es' ? 'Tienes tiempo de rendir final hasta el mes de febrero/marzo de' : 'You have time to take the final exam until February/March of'} ${nextYear}.
+            `;
+        } else if (quarter === "2do Cuatrimestre") {
+            var nextYear2 = year + 1;
+            var followingYear = nextYear2 + 1;
+            resultText = `
+                ${language === 'es' ? 'Los llamados para la asignatura' : 'The calls for the subject'} <strong>${subjectName}</strong> ${language === 'es' ? 'son:' : 'are:'}
+                <br>1) ${language === 'es' ? 'Llamado fin de año (diciembre) de' : 'End-of-year call (December) from'}: ${nextYear2}
+                <br>2) ${language === 'es' ? 'Llamado principio de año (febrero/marzo) de' : 'Beginning-of-year call (February/March) from'}: ${nextYear2}
+                <br>3) ${language === 'es' ? 'Llamado mitad de año (julio/agosto) de' : 'Mid-year call (July/August) from'}: ${nextYear2}
+                <br>4) ${language === 'es' ? 'Llamado fin de año (diciembre) de' : 'End-of-year call (December) from'}: ${nextYear2}
+                <br>5) ${language === 'es' ? 'Llamado principio de año (febrero/marzo) de' : 'Beginning-of-year call (February/March) from'}: ${followingYear}
+                <br>${language === 'es' ? 'Tienes tiempo de rendir final hasta el mes de febrero/marzo de' : 'You have time to take the final exam until February/March of'} ${followingYear}.
+            `;
+        } else if (quarter === "Anual") {
+            var nextYear3 = year + 1;
+            var followingYear2 = nextYear3 + 1;
+            resultText = `
+                ${language === 'es' ? 'Los llamados para la asignatura' : 'The calls for the subject'} <strong>${subjectName}</strong> ${language === 'es' ? 'son:' : 'are:'}
+                <br>1) ${language === 'es' ? 'Llamado fin de año (diciembre) de' : 'End-of-year call (December) from'}: ${nextYear3}
+                <br>2) ${language === 'es' ? 'Llamado principio de año (febrero/marzo) de' : 'Beginning-of-year call (February/March) from'}: ${nextYear3}
+                <br>3) ${language === 'es' ? 'Llamado mitad de año (julio/agosto) de' : 'Mid-year call (July/August) from'}: ${nextYear3}
+                <br>4) ${language === 'es' ? 'Llamado fin de año (diciembre) de' : 'End-of-year call (December) from'}: ${nextYear3}
+                <br>5) ${language === 'es' ? 'Llamado principio de año (febrero/marzo) de' : 'Beginning-of-year call (February/March) from'}: ${followingYear2}
+                <br>${language === 'es' ? 'Tienes tiempo de rendir final hasta el mes de febrero/marzo de' : 'You have time to take the final exam until February/March of'} ${followingYear2}.
+            `;
+        }
+
+        // Show result
+        document.getElementById("result").innerHTML = resultText;
+    });
+</script>
+
+</body>
+</html>
